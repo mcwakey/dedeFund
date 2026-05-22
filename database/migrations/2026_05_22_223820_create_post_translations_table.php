@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('post_translations', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('post_id')->index();
+            $table->foreignId('post_id')->constrained()->cascadeOnDelete();
             $table->string('locale', 5)->index();
             $table->string('title');
             $table->string('slug');

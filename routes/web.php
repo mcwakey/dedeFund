@@ -1,13 +1,29 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Public\BlogController;
 use App\Http\Controllers\Public\FormSubmissionController;
 use App\Http\Controllers\Public\HomeController;
 use App\Http\Controllers\Public\PageController;
 use App\Http\Controllers\Public\ProjectController;
 use Illuminate\Support\Facades\Route;
+
+Route::get('/build/{path}', function (string $path) {
+    abort_if(str_contains($path, '..'), 404);
+
+    $file = public_path('build/'.$path);
+    abort_unless(is_file($file), 404);
+
+    $contentType = match (pathinfo($file, PATHINFO_EXTENSION)) {
+        'css' => 'text/css',
+        'js' => 'application/javascript',
+        'json' => 'application/json',
+        default => mime_content_type($file) ?: 'application/octet-stream',
+    };
+
+    return response()->file($file, ['Content-Type' => $contentType]);
+})->where('path', '.*')->name('local.assets');
 
 Route::redirect('/', '/fr');
 

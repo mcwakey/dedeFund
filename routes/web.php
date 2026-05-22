@@ -1,6 +1,11 @@
 <?php
 
+use App\Http\Controllers\Admin\ContactMessageController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\DonationIntentController;
+use App\Http\Controllers\Admin\InternshipApplicationController;
+use App\Http\Controllers\Admin\ProjectManagementController;
+use App\Http\Controllers\Admin\VolunteerApplicationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Public\BlogController;
 use App\Http\Controllers\Public\FormSubmissionController;
@@ -8,6 +13,7 @@ use App\Http\Controllers\Public\HomeController;
 use App\Http\Controllers\Public\PageController;
 use App\Http\Controllers\Public\ProjectController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 Route::get('/build/{path}', function (string $path) {
     abort_if(str_contains($path, '..'), 404);
@@ -62,6 +68,18 @@ Route::prefix('{locale}')->group(function () {
 
 Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', DashboardController::class)->name('dashboard');
+    Route::get('/files/{path}', function (string $path) {
+        abort_if(str_contains($path, '..'), 404);
+        abort_unless(Storage::disk('local')->exists($path), 404);
+
+        return Storage::disk('local')->download($path);
+    })->where('path', '.*')->name('files.show');
+
+    Route::resource('projects', ProjectManagementController::class)->except('show');
+    Route::resource('donations', DonationIntentController::class)->only(['index', 'show', 'update']);
+    Route::resource('messages', ContactMessageController::class)->only(['index', 'show', 'update']);
+    Route::resource('volunteers', VolunteerApplicationController::class)->only(['index', 'show', 'update']);
+    Route::resource('internships', InternshipApplicationController::class)->only(['index', 'show', 'update']);
 });
 
 Route::middleware('auth')->group(function () {

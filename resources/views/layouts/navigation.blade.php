@@ -12,8 +12,23 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                    <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
                         {{ __('Dashboard') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('admin.projects.index')" :active="request()->routeIs('admin.projects.*')">
+                        {{ __('Projects') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('admin.donations.index')" :active="request()->routeIs('admin.donations.*')">
+                        {{ __('Donations') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('admin.volunteers.index')" :active="request()->routeIs('admin.volunteers.*')">
+                        {{ __('Volunteers') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('admin.internships.index')" :active="request()->routeIs('admin.internships.*')">
+                        {{ __('Internships') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('admin.messages.index')" :active="request()->routeIs('admin.messages.*')">
+                        {{ __('Messages') }}
                     </x-nav-link>
                 </div>
             </div>
@@ -67,8 +82,23 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+            <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
                 {{ __('Dashboard') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('admin.projects.index')" :active="request()->routeIs('admin.projects.*')">
+                {{ __('Projects') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('admin.donations.index')" :active="request()->routeIs('admin.donations.*')">
+                {{ __('Donations') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('admin.volunteers.index')" :active="request()->routeIs('admin.volunteers.*')">
+                {{ __('Volunteers') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('admin.internships.index')" :active="request()->routeIs('admin.internships.*')">
+                {{ __('Internships') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('admin.messages.index')" :active="request()->routeIs('admin.messages.*')">
+                {{ __('Messages') }}
             </x-responsive-nav-link>
         </div>
 

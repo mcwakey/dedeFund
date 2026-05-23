@@ -1,16 +1,24 @@
+@php
+    $organizationName = \App\Models\SiteSetting::getValue('organization_name', 'DedeFund');
+    $defaultMetaDescription = \App\Models\SiteSetting::getValue('default_meta_description', 'DedeFund works for dignity, justice, peace, and a world without poverty.');
+@endphp
 <!DOCTYPE html>
 <html lang="{{ $locale ?? 'fr' }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="@yield('meta_description', 'DedeFund works for dignity, justice, peace, and a world without poverty.')">
-    <title>@yield('title', 'DedeFund')</title>
+    <meta name="description" content="@yield('meta_description', $defaultMetaDescription)">
+    <title>@yield('title', $organizationName)</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-slate-50 text-slate-900 antialiased">
     @php
         $locale = $locale ?? app()->getLocale();
         $isFr = $locale === 'fr';
+        $whatsappNumber = \App\Models\SiteSetting::getValue('whatsapp_number', '+12403538332');
+        $contactEmails = \Illuminate\Support\Arr::wrap(\App\Models\SiteSetting::getValue('contact_emails', ['info@dedefund.org', 'dedeusca@gmail.com']));
+        $address = \App\Models\SiteSetting::getValue('address', '897 Middle River RD, Middle River, MD 21220, USA');
+        $phone = \App\Models\SiteSetting::getValue('phone', '+1 240 353 8332');
         $nav = [
             ['label' => $isFr ? 'Accueil' : 'Home', 'route' => 'home'],
             ['label' => $isFr ? 'A propos' : 'About', 'route' => 'about'],
@@ -26,7 +34,7 @@
             <a href="{{ route('home', ['locale' => $locale]) }}" class="flex items-center gap-3">
                 <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-700 text-sm font-black text-white">DF</span>
                 <span>
-                    <span class="block text-lg font-black tracking-tight text-slate-950">DedeFund</span>
+                    <span class="block text-lg font-black tracking-tight text-slate-950">{{ $organizationName }}</span>
                     <span class="block text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">501(c)(3) charity</span>
                 </span>
             </a>
@@ -75,7 +83,7 @@
     <footer class="mt-20 bg-slate-950 text-white">
         <div class="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:px-6 md:grid-cols-4 lg:px-8">
             <div class="md:col-span-2">
-                <div class="text-2xl font-black">DedeFund</div>
+                <div class="text-2xl font-black">{{ $organizationName }}</div>
                 <p class="mt-4 max-w-xl text-sm leading-6 text-slate-300">
                     {{ $isFr ? 'Association a but non lucratif engagee pour la dignite humaine, la justice, la paix et la lutte contre la pauvrete.' : 'A nonprofit organization committed to human dignity, justice, peace, and the fight against poverty.' }}
                 </p>
@@ -83,10 +91,9 @@
             <div>
                 <div class="font-bold">{{ $isFr ? 'Contact' : 'Contact' }}</div>
                 <p class="mt-4 text-sm leading-6 text-slate-300">
-                    897 Middle River RD<br>
-                    Middle River, MD 21220, USA<br>
-                    +1 240 353 8332<br>
-                    info@dedefund.org
+                    {{ $address }}<br>
+                    {{ $phone }}<br>
+                    {{ $contactEmails[0] ?? 'info@dedefund.org' }}
                 </p>
             </div>
             <div>
@@ -104,8 +111,10 @@
         </div>
     </footer>
 
-    <a href="https://wa.me/12403538332?text={{ urlencode($isFr ? 'Bonjour DedeFund, je souhaite avoir des informations.' : 'Hello DedeFund, I would like more information.') }}" class="fixed bottom-5 right-5 rounded-full bg-emerald-600 px-5 py-3 text-sm font-bold text-white shadow-lg hover:bg-emerald-700">
-        WhatsApp
-    </a>
+    @if ($whatsappNumber)
+        <a href="https://wa.me/{{ preg_replace('/\D+/', '', $whatsappNumber) }}?text={{ urlencode($isFr ? 'Bonjour DedeFund, je souhaite avoir des informations.' : 'Hello DedeFund, I would like more information.') }}" class="fixed bottom-5 right-5 rounded-full bg-emerald-600 px-5 py-3 text-sm font-bold text-white shadow-lg hover:bg-emerald-700">
+            WhatsApp
+        </a>
+    @endif
 </body>
 </html>

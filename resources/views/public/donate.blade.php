@@ -15,6 +15,15 @@
             <strong>{{ $isFr ? 'Moyens prevus :' : 'Planned methods:' }}</strong>
             PayPal, virement bancaire, Visa/Mastercard, Western Union, MoneyGram.
         </div>
+        @if ($donationSettings['paypal_url'])
+            <a class="mt-5 inline-flex rounded-full bg-emerald-700 px-5 py-3 font-bold text-white hover:bg-emerald-800" href="{{ $donationSettings['paypal_url'] }}">{{ $isFr ? 'Ouvrir PayPal' : 'Open PayPal' }}</a>
+        @endif
+        @if ($donationSettings['show_bank_details'] && $donationSettings['bank_details'])
+            <div class="mt-5 rounded-lg border border-slate-200 bg-white p-5 text-sm leading-6 text-slate-700">
+                <strong>{{ $isFr ? 'Coordonnees bancaires' : 'Bank details' }}</strong>
+                <p class="mt-2 whitespace-pre-line">{{ $donationSettings['bank_details'] }}</p>
+            </div>
+        @endif
     </div>
     <form method="POST" action="{{ route('donation.store', ['locale' => $locale]) }}" class="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
         @csrf

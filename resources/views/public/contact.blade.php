@@ -10,10 +10,11 @@
         <h1 class="mt-4 text-4xl font-black tracking-tight text-slate-950">{{ $isFr ? 'Parlons de votre contribution.' : 'Let us talk about your contribution.' }}</h1>
         <div class="mt-8 rounded-lg border border-slate-200 bg-white p-6 text-sm leading-7 shadow-sm">
             <strong>DedeFund</strong><br>
-            897 Middle River RD, Middle River, MD 21220, USA<br>
-            +1 240 353 8332<br>
-            info@dedefund.org<br>
-            dedeusca@gmail.com
+            {{ $contactSettings['address'] }}<br>
+            {{ $contactSettings['phone'] }}<br>
+            @foreach ($contactSettings['contact_emails'] as $email)
+                {{ $email }}<br>
+            @endforeach
         </div>
     </div>
     <form method="POST" action="{{ route('contact.store', ['locale' => $locale]) }}" class="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">

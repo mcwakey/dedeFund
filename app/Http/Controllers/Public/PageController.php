@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Public;
 use App\Http\Controllers\Controller;
 use App\Models\InterventionArea;
 use App\Models\Project;
+use App\Models\SiteSetting;
 
 class PageController extends Controller
 {
@@ -32,6 +33,11 @@ class PageController extends Controller
         return view('public.donate', [
             'locale' => $locale,
             'projects' => Project::published()->with('translations')->latest()->get(),
+            'donationSettings' => [
+                'paypal_url' => SiteSetting::getValue('paypal_url'),
+                'bank_details' => SiteSetting::getValue('bank_details'),
+                'show_bank_details' => SiteSetting::getValue('show_bank_details', false),
+            ],
         ]);
     }
 
@@ -53,7 +59,14 @@ class PageController extends Controller
     {
         app()->setLocale($locale);
 
-        return view('public.contact', compact('locale'));
+        return view('public.contact', [
+            'locale' => $locale,
+            'contactSettings' => [
+                'address' => SiteSetting::getValue('address', '897 Middle River RD, Middle River, MD 21220, USA'),
+                'phone' => SiteSetting::getValue('phone', '+1 240 353 8332'),
+                'contact_emails' => SiteSetting::getValue('contact_emails', ['info@dedefund.org', 'dedeusca@gmail.com']),
+            ],
+        ]);
     }
 
     public function privacy(string $locale)

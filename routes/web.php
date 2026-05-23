@@ -4,7 +4,10 @@ use App\Http\Controllers\Admin\ContactMessageController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DonationIntentController;
 use App\Http\Controllers\Admin\InternshipApplicationController;
+use App\Http\Controllers\Admin\InterventionAreaController;
+use App\Http\Controllers\Admin\PostManagementController;
 use App\Http\Controllers\Admin\ProjectManagementController;
+use App\Http\Controllers\Admin\SiteSettingController;
 use App\Http\Controllers\Admin\VolunteerApplicationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Public\BlogController;
@@ -75,11 +78,15 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
         return Storage::disk('local')->download($path);
     })->where('path', '.*')->name('files.show');
 
+    Route::resource('areas', InterventionAreaController::class)->except('show');
     Route::resource('projects', ProjectManagementController::class)->except('show');
+    Route::resource('posts', PostManagementController::class)->except('show');
     Route::resource('donations', DonationIntentController::class)->only(['index', 'show', 'update']);
     Route::resource('messages', ContactMessageController::class)->only(['index', 'show', 'update']);
     Route::resource('volunteers', VolunteerApplicationController::class)->only(['index', 'show', 'update']);
     Route::resource('internships', InternshipApplicationController::class)->only(['index', 'show', 'update']);
+    Route::get('settings', [SiteSettingController::class, 'edit'])->name('settings.edit');
+    Route::put('settings', [SiteSettingController::class, 'update'])->name('settings.update');
 });
 
 Route::middleware('auth')->group(function () {

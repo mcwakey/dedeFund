@@ -18,6 +18,10 @@ use App\Http\Controllers\Public\ProjectController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
+Route::get('/index.php/{path?}', function (?string $path = null) {
+    return redirect('/'.ltrim((string) $path, '/'), 301);
+})->where('path', '.*');
+
 Route::get('/build/{path}', function (string $path) {
     abort_if(str_contains($path, '..'), 404);
 

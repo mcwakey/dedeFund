@@ -20,4 +20,10 @@ class ExampleTest extends TestCase
 
         $response->assertStatus(200);
     }
+
+    public function test_legacy_index_php_urls_redirect_to_clean_paths(): void
+    {
+        $this->get('/index.php/fr/about')
+            ->assertRedirect('/fr/about');
+    }
 }

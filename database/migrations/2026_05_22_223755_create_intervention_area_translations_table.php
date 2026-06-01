@@ -22,7 +22,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->unique(['locale', 'slug']);
-            $table->unique(['intervention_area_id', 'locale']);
+            $table->unique(['intervention_area_id', 'locale'], 'iat_area_id_locale_unique');
         });
     }
 
